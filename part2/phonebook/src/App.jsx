@@ -75,7 +75,8 @@ const App = () => {
 						console.log(error);
 						setError('error')
 						setNotificationMessage(
-							`Information of ${newPerson.name} has already been removed from server`
+							// `Information of ${newPerson.name} has already been removed from server`
+							`${error.response.data.error}`
 						);
 						clearNotificationMessage();
 						setPersons(
@@ -94,7 +95,14 @@ const App = () => {
 						`Added ${addedPerson.name}`
 					);
 					clearNotificationMessage();
-				});
+				}).catch(error => {
+					setError('error')
+					setNotificationMessage(
+						// `Information of ${newPerson.name} has already been removed from server`
+						`${error.response.data.error}`
+					);
+					clearNotificationMessage()
+				})
 		}
 	};
 
