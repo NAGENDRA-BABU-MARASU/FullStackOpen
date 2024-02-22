@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries';
 
-const Authors = (props) => {
+const Authors = ({ isAuthenticated }) => {
 	const result = useQuery(ALL_AUTHORS);
 	const [authorMutation] = useMutation(UPDATE_AUTHOR, {
 		refetchQueries: [{ query: ALL_AUTHORS }],
@@ -47,36 +47,31 @@ const Authors = (props) => {
 					))}
 				</tbody>
 			</table>
-
-			<div>
-				<h1>Set birthyear</h1>
-				<label htmlFor="authors">
-					Choose an author to update thier born year:
-				</label>
-				<select
-					name="authors"
-					id="authors"
-					onChange={(event) => setName(event.target.value)}
-				>
-					{authors.map((a) => (
-						<option key={a.id} value={a.name}>
-							{a.name}
-						</option>
-					))}
-				</select>
-				born:{' '}
-				<input
-					type="number"
-					name="birthyear"
-					value={birthYear}
-					onChange={(event) => {
-						setBirthYear(event.target.value);
-					}}
-				/>
-				<button type="button" onClick={updateAuthor}>
-					update author
-				</button>
-			</div>
+			{isAuthenticated && (
+				<div>
+					<h1>Set birthyear</h1>
+					<label htmlFor="authors">Choose an author to update thier born year:</label>
+					<select name="authors" id="authors" onChange={(event) => setName(event.target.value)}>
+						{authors.map((a) => (
+							<option key={a.id} value={a.name}>
+								{a.name}
+							</option>
+						))}
+					</select>
+					born:{' '}
+					<input
+						type="number"
+						name="birthyear"
+						value={birthYear}
+						onChange={(event) => {
+							setBirthYear(event.target.value);
+						}}
+					/>
+					<button type="button" onClick={updateAuthor}>
+						update author
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { ALL_BOOKS, BOOKS_WITH_GENRE } from '../queries';
+import { useQuery, useSubscription } from '@apollo/client';
+import { ALL_BOOKS, BOOKS_WITH_GENRE, BOOK_ADDED } from '../queries';
 
 const Books = (props) => {
 	const result = useQuery(ALL_BOOKS);
@@ -14,9 +14,7 @@ const Books = (props) => {
 	}
 
 	if (selectedGenreBooks.loading) {
-		return (
-			<div>loading 🐌🐌 books of genre : {genre} </div>
-		);
+		return <div>loading 🐌🐌 books of genre : {genre} </div>;
 	}
 
 	const books = result.data.allBooks;
@@ -61,12 +59,8 @@ const Books = (props) => {
 				</tbody>
 			</table>
 			{genres.map((genre) => (
-				<button
-					key={genre}
-					onClick={() => setGenre(genre)}
-					style={{ margin: '0 20px 0 0' }}
-				>
-					{genre}
+				<button key={genre} onClick={() => setGenre(genre)} style={{ margin: '10px 10px 0 0' }}>
+					{genre.toLowerCase()}
 				</button>
 			))}
 		</div>

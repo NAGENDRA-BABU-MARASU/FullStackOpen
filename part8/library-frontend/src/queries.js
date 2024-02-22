@@ -11,53 +11,40 @@ export const ALL_AUTHORS = gql`
 	}
 `;
 
+const BOOK_DETAILS = gql`
+	fragment bookDetails on Book {
+		title
+		genres
+		published
+		id
+		author {
+			name
+			born
+			id
+		}
+	}
+`;
+
 export const ALL_BOOKS = gql`
 	query AllBooks {
 		allBooks {
-			title
-			genres
-			published
-			id
-			author {
-				name
-				born
-				id
-			}
+			...bookDetails
 		}
 	}
+	${BOOK_DETAILS}
 `;
 
 export const ADD_BOOK = gql`
-	mutation createBook(
-		$title: String!
-		$author: String!
-		$published: Int!
-		$genres: [String]!
-	) {
-		addBook(
-			title: $title
-			author: $author
-			published: $published
-			genres: $genres
-		) {
-			title
-			genres
-			published
-			id
-			author {
-				name
-				born
-				id
-			}
+	mutation createBook($title: String!, $author: String!, $published: Int!, $genres: [String]!) {
+		addBook(title: $title, author: $author, published: $published, genres: $genres) {
+			...bookDetails
 		}
 	}
+	${BOOK_DETAILS}
 `;
 
 export const UPDATE_AUTHOR = gql`
-	mutation updateBornYear(
-		$name: String!
-		$setBornTo: Int!
-	) {
+	mutation updateBornYear($name: String!, $setBornTo: Int!) {
 		editAuthor(name: $name, setBornTo: $setBornTo) {
 			born
 			id
@@ -75,23 +62,26 @@ export const LOGIN = gql`
 `;
 
 export const BOOKS_WITH_GENRE = gql`
-	query ( $genre: String) {
+	query ($genre: String) {
 		allBooks(genre: $genre) {
-			title
-			genres
-			id
-			published
-			author {
-				name
-				born
-			}
+			...bookDetails
 		}
 	}
+	${BOOK_DETAILS}
+`;
+
+export const BOOK_ADDED = gql`
+	subscription {
+		bookAdded {
+			...bookDetails
+		}
+	}
+	${BOOK_DETAILS}
 `;
 
 export const ME = gql`
-	query { 
-		me { 
+	query {
+		me {
 			favoriteGenre
 		}
 	}

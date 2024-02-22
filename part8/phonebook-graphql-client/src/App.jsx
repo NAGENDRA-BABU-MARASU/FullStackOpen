@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import {
-	gql,
-	useApolloClient,
-	useQuery,
-} from '@apollo/client';
-import { ALL_PERSONS, FIND_PERSON } from './queries';
+import { gql, useApolloClient, useQuery, useSubscription } from '@apollo/client';
+import { ALL_PERSONS, FIND_PERSON, PERSON_ADDED, updateCache } from './queries';
 
 import './App.css';
 import PersonForm from './PersonForm';
@@ -32,12 +28,7 @@ const Persons = ({ persons }) => {
 	});
 
 	if (nameToSearch && result.data) {
-		return (
-			<Person
-				person={result.data.findPerson}
-				onClose={() => setNameToSearch(null)}
-			/>
-		);
+		return <Person person={result.data.findPerson} onClose={() => setNameToSearch(null)} />;
 	}
 	return (
 		<div>
@@ -45,9 +36,7 @@ const Persons = ({ persons }) => {
 			{persons.map((p) => (
 				<div key={p.name}>
 					{p.name} {p.phone}
-					<button onClick={() => setNameToSearch(p.name)}>
-						show address{' '}
-					</button>
+					<button onClick={() => setNameToSearch(p.name)}>show address </button>
 				</div>
 			))}
 		</div>
@@ -66,6 +55,14 @@ function App() {
 	const [token, setToken] = useState(null);
 	const result = useQuery(ALL_PERSONS);
 	const client = useApolloClient();
+
+	useSubscription(PERSON_ADDED, {
+		onData: ({ data, client }) => {
+			const addedPerson = data.data.personAdded;
+			notify(`${addedPerson.name} added`);
+			updateCache(client.cache, { query: ALL_PERSONS }, addedPerson);
+		},
+	});
 
 	if (result.loading) {
 		return <div>Loading...</div>;
