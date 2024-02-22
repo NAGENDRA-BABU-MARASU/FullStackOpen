@@ -127,7 +127,6 @@ const resolvers = {
 				const booksWithGenre = await Book.find({
 					genres: args.genre,
 				}).populate('author');
-				console.log(booksWithGenre);
 				return booksWithGenre;
 			}
 			return Book.find({}).populate('author');
@@ -252,7 +251,6 @@ const resolvers = {
 							password,
 							user.passwordHash
 					  );
-			console.log('password correct', passwordCorrect);
 			if (!user || !passwordCorrect) {
 				throw new GraphQLError(
 					'login failed due to wrong credentials',

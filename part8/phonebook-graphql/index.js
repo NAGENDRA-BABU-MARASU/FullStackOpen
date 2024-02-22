@@ -155,8 +155,6 @@ const resolvers = {
 				});
 			}
 
-			console.log('process:', process);
-
 			const userForToken = {
 				username: user.username,
 				id: user._id,
@@ -219,7 +217,7 @@ const resolvers = {
 					.map((f) => f._id.toString())
 					.includes(person._id.toString());
 			if (!context.currentUser) {
-				throw new GraphQLError('wrong credentials', {
+				throw new GraphQLError('not authenticated', {
 					extensions: { code: 'BAD_USER_INPUT' },
 				});
 			}
@@ -231,10 +229,9 @@ const resolvers = {
 				context.currentUser.friends =
 					context.currentUser.friends.concat(person);
 			}
-			await context.currentUser.save()
+			await context.currentUser.save();
 
-			return context.currentUser 
-
+			return context.currentUser;
 		},
 	},
 	Person: {
