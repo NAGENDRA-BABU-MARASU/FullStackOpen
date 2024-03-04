@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index",
     "dev": "cross-env NODE_ENV=development nodemon index",
-    "build:ui":"rm -rf dist && cd ../../part5/bloglist-frontend && npm run build && cp -r dist ../../part4/bloglist",
+    "build:ui":"rm -rf dist && cd ../client && npm run build && cp -r dist ../server",
     "deploy:full:windows": "npm config set script-shell \"C:\\Program Files\\git\\bin\\bash.exe\" && npm run build:ui && git add . && git commit -m uibuild && git push",
     "deploy": "npm run build:ui && git add . && git commit -m uibuild && git push",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
