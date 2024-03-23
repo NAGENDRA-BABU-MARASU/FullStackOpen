@@ -2,8 +2,7 @@
 # part3
 # part4 
 # part5
-.gitignore
-.gitmodules
+
 counter-redux
 query-notes
 react-reduce
