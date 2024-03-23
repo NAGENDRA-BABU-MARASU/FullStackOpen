@@ -23,7 +23,10 @@ Blog.init({
   likes: {
     type: DataTypes.INTEGER,
     defaultValue: 0
+  }, 
+  year: { 
+    type: DataTypes.INTEGER, 
   }
-}, { sequelize, underscored: true, timestamps: false, modelName: 'blog' })
+}, { sequelize, underscored: true, timestamps: true, modelName: 'blog' })
 
 module.exports = Blog;

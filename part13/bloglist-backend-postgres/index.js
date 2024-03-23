@@ -8,13 +8,17 @@ const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const authorsRouter = require('./controllers/authors')
+const readingListRouter = require('./controllers/readingList')
+const logoutRouter = require('./controllers/logout')
 
 app.use(express.json())
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/logout', logoutRouter)
 app.use('/api/authors', authorsRouter)
+app.use('/api/readinglists', readingListRouter)
 
 
 const errorHandler = (error, req, res, next) => {
@@ -103,27 +107,27 @@ start()
 //   }
 // })
 
-// app.post('/api/blogs', async(req, res) => { 
-//   try { 
+// app.post('/api/blogs', async(req, res) => {
+//   try {
 //     const blog = await Blog.create(req.body);
 //     return res.json(blog);
-//   } catch (error) { 
+//   } catch (error) {
 //     return res.status(400).json({ error })
 //   }
 // })
 
-// app.put('/api/blogs/:id', async(req, res) => { 
+// app.put('/api/blogs/:id', async(req, res) => {
 //   const blog = await Blog.findByPk(req.params.id)
-//   if(blog) { 
+//   if(blog) {
 //     blog.likes = req.body.likes;
 //     await blog.save();
 //     res.json(blog)
-//   } else { 
+//   } else {
 //     res.status(404).end()
 //   }
 // })
 
 // const PORT = process.env.PORT || 3003;
-// app.listen(PORT, () => { 
+// app.listen(PORT, () => {
 //   console.log(`Server is running on port: ${PORT}`)
 // } )

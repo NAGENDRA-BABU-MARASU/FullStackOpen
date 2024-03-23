@@ -1,9 +1,8 @@
 const router = require('express').Router()
-const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 
 const { Blog, User } = require('../models');
-const { SECRET } = require('../util/config');
+const { tokenExtractor } = require('../util/middleware')
 
 router.get('/', async (req, res) => {
   let where = {}
@@ -35,23 +34,21 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-const tokenExtractor = (req, res, next) => {
-  const authorization = req.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    try {
-      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
-    } catch {
-      return res.status(401).json({ error: 'invalid token' })
-    }
-  } else {
-    return res.status(401).json({ error: 'token missing!!' })
-  }
-  next()
-}
+
 
 router.post('/', tokenExtractor, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.decodedToken.id)
+    const year = parseInt(req.body.year);
+
+    if(!year) {
+      return res.status(400).json({ error: "year must be given!"})
+    }
+
+    const currentYear = new Date().getFullYear()
+    if (year < 1991 || year > currentYear) {
+      return res.status(400).json({ error: `year must be in between 1991 && ${currentYear}` })
+    }
     const blog = await Blog.create({ ...req.body, userId: user.id });
     return res.json(blog);
   } catch (error) {

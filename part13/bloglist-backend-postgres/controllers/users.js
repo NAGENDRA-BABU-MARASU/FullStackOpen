@@ -1,15 +1,57 @@
 const router = require('express').Router()
 
-const { User, Blog } = require('../models')
+const { User, Blog, ReadingList } = require('../models')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
     include: {
       model: Blog,
-      attributes: { exclude: ['userId']}
+      attributes: { exclude: ['userId'] }
     }
   })
   res.json(users)
+})
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  const where = {
+    id,
+    '$readings.readingLists.user_id$': id,
+  }
+
+  if (req.query.read === 'true') {
+    where['$readings.readingLists.read$'] = true;
+  } else if (req.query.read === 'false') {
+    where['$readings.readingLists.read$'] = false;
+  }
+
+  const user = await User.findOne({
+    attributes: ['name', 'username'],
+    where,
+    include: [
+      {
+        model: Blog,
+        as: 'readings',
+        attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
+        through: {
+          attributes: []
+        },
+        include: [
+          {
+            model: ReadingList,
+            attributes: ['read', 'id']
+          }
+        ]
+      }
+    ]
+  });
+
+  if (user) {
+    res.json(user)
+  } else {
+    res.status(404).end()
+  }
 })
 
 router.post('/', async (req, res, next) => {
