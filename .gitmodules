@@ -1,3 +1,6 @@
 [submodule "part3/phonebook_backend"]
 	path = part3/phonebook_backend
 	url = https://github.com/NAGENDRA-BABU-MARASU/fullstackopen_phonebook_backend
+[submodule "part4/bloglist"]
+	path = part4/bloglist
+	url = https://github.com/NAGENDRA-BABU-MARASU/fullstackopen_bloglist_backend
