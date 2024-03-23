@@ -4,3 +4,6 @@
 [submodule "part4/bloglist"]
 	path = part4/bloglist
 	url = https://github.com/NAGENDRA-BABU-MARASU/fullstackopen_bloglist_backend
+[submodule "part5"]
+	path = part5
+	url = https://github.com/NAGENDRA-BABU-MARASU/bloglist-frontend
